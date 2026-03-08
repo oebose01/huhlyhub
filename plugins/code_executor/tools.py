@@ -1,4 +1,3 @@
-import sys
 import io
 import traceback
 import json
@@ -6,8 +5,10 @@ from contextlib import redirect_stdout, redirect_stderr
 import threading
 import builtins
 
+
 class TimeoutException(Exception):
     pass
+
 
 def execute_python(code: str, timeout: float = 5) -> dict:
     """
@@ -16,33 +17,33 @@ def execute_python(code: str, timeout: float = 5) -> dict:
     """
     # Restricted builtins: remove dangerous functions
     safe_builtins = {
-        'print': builtins.print,
-        'range': builtins.range,
-        'len': builtins.len,
-        'str': builtins.str,
-        'int': builtins.int,
-        'float': builtins.float,
-        'list': builtins.list,
-        'dict': builtins.dict,
-        'tuple': builtins.tuple,
-        'set': builtins.set,
-        'bool': builtins.bool,
-        'abs': builtins.abs,
-        'min': builtins.min,
-        'max': builtins.max,
-        'sum': builtins.sum,
-        'enumerate': builtins.enumerate,
-        'zip': builtins.zip,
-        'any': builtins.any,
-        'all': builtins.all,
-        'sorted': builtins.sorted,
-        'reversed': builtins.reversed,
-        'Exception': builtins.Exception,
-        'ValueError': builtins.ValueError,
-        'TypeError': builtins.TypeError,
-        'KeyError': builtins.KeyError,
-        'IndexError': builtins.IndexError,
-        'AttributeError': builtins.AttributeError,
+        "print": builtins.print,
+        "range": builtins.range,
+        "len": builtins.len,
+        "str": builtins.str,
+        "int": builtins.int,
+        "float": builtins.float,
+        "list": builtins.list,
+        "dict": builtins.dict,
+        "tuple": builtins.tuple,
+        "set": builtins.set,
+        "bool": builtins.bool,
+        "abs": builtins.abs,
+        "min": builtins.min,
+        "max": builtins.max,
+        "sum": builtins.sum,
+        "enumerate": builtins.enumerate,
+        "zip": builtins.zip,
+        "any": builtins.any,
+        "all": builtins.all,
+        "sorted": builtins.sorted,
+        "reversed": builtins.reversed,
+        "Exception": builtins.Exception,
+        "ValueError": builtins.ValueError,
+        "TypeError": builtins.TypeError,
+        "KeyError": builtins.KeyError,
+        "IndexError": builtins.IndexError,
+        "AttributeError": builtins.AttributeError,
     }
 
     namespace = {}
@@ -57,9 +58,9 @@ def execute_python(code: str, timeout: float = 5) -> dict:
         try:
             with redirect_stdout(stdout_capture), redirect_stderr(stderr_capture):
                 # Compile code
-                compiled = compile(code, '<string>', 'exec')
+                compiled = compile(code, "<string>", "exec")
                 # Execute with restricted builtins and empty namespace
-                exec(compiled, {'__builtins__': safe_builtins}, namespace)
+                exec(compiled, {"__builtins__": safe_builtins}, namespace)
             result["success"] = True
         except Exception:
             stderr_capture.write(traceback.format_exc())
@@ -70,7 +71,7 @@ def execute_python(code: str, timeout: float = 5) -> dict:
             # Filter namespace to only include simple types
             safe_vars = {}
             for k, v in namespace.items():
-                if k.startswith('__'):
+                if k.startswith("__"):
                     continue
                 try:
                     # Check if JSON serializable

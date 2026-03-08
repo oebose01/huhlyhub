@@ -1,6 +1,5 @@
 from core.interfaces import Tool, Plugin
 from core import CORE_API_VERSION
-from .tools import execute_python
 
 tool = Tool(
     name="execute_python",
@@ -9,9 +8,13 @@ tool = Tool(
         "type": "object",
         "properties": {
             "code": {"type": "string", "description": "Python code to execute"},
-            "timeout": {"type": "number", "description": "Maximum execution time in seconds", "default": 5}
+            "timeout": {
+                "type": "number",
+                "description": "Maximum execution time in seconds",
+                "default": 5,
+            },
         },
-        "required": ["code"]
+        "required": ["code"],
     },
     output_schema={
         "type": "object",
@@ -19,9 +22,9 @@ tool = Tool(
             "success": {"type": "boolean"},
             "stdout": {"type": "string"},
             "stderr": {"type": "string"},
-            "variables": {"type": "object"}
-        }
-    }
+            "variables": {"type": "object"},
+        },
+    },
 )
 
 plugin = Plugin(
@@ -29,5 +32,5 @@ plugin = Plugin(
     version="0.1.0",
     core_api_version=CORE_API_VERSION,
     agents=[],
-    tools=[tool]
+    tools=[tool],
 )

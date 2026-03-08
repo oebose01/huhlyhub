@@ -96,3 +96,43 @@ def test_pii_redacted_on_save():
         assert "555-123-4567" not in retrieved.prompt
         assert "jane@doe.com" not in retrieved.response
         assert "987-65-4321" not in retrieved.response
+
+
+def test_get_all_by_prompt():
+    """Should retrieve all feedback entries for a given prompt."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        store = FeedbackStore(db_path=Path(tmpdir) / "feedback.db")
+        now = datetime.now()
+        store.save(
+            FeedbackEntry(
+                id="1",
+                prompt="test prompt",
+                response="response1",
+                rating=5,
+                timestamp=now,
+                metadata={},
+            )
+        )
+        store.save(
+            FeedbackEntry(
+                id="2",
+                prompt="test prompt",
+                response="response2",
+                rating=3,
+                timestamp=now,
+                metadata={},
+            )
+        )
+        store.save(
+            FeedbackEntry(
+                id="3",
+                prompt="other prompt",
+                response="response3",
+                rating=4,
+                timestamp=now,
+                metadata={},
+            )
+        )
+        results = store.get_all_by_prompt("test prompt")
+        assert len(results) == 2
+        assert {r.id for r in results} == {"1", "2"}

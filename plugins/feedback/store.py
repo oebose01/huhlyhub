@@ -74,3 +74,24 @@ class FeedbackStore:
                 timestamp=datetime.fromisoformat(row[4]),
                 metadata=json.loads(row[5]),
             )
+
+    def get_all_by_prompt(self, prompt: str) -> list[FeedbackEntry]:
+        """Retrieve all feedback entries with the exact prompt."""
+        with sqlite3.connect(self.db_path) as conn:
+            rows = conn.execute(
+                "SELECT id, prompt, response, rating, timestamp, metadata FROM feedback WHERE prompt = ?",
+                (prompt,),
+            ).fetchall()
+            entries = []
+            for row in rows:
+                entries.append(
+                    FeedbackEntry(
+                        id=row[0],
+                        prompt=row[1],
+                        response=row[2],
+                        rating=row[3],
+                        timestamp=datetime.fromisoformat(row[4]),
+                        metadata=json.loads(row[5]),
+                    )
+                )
+            return entries
