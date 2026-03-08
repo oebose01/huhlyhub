@@ -23,8 +23,9 @@ class PluginLoader:
         self._plugins: Dict[str, Plugin] = {}
 
     def discover_plugins(self) -> List[Path]:
-        """Find all .py files in plugin_dir (non-recursive for now)."""
-        return list(self.plugin_dir.glob("*.py"))
+        """Find the plugin.py file in the directory (if any)."""
+        plugin_file = self.plugin_dir / "plugin.py"
+        return [plugin_file] if plugin_file.exists() else []
 
     def load_plugin(self, path: Path) -> Plugin:
         """Load a single plugin file, validate version, and instantiate."""
@@ -32,7 +33,6 @@ class PluginLoader:
         module_name = path.stem
         spec = importlib.util.spec_from_file_location(module_name, path)
         if spec is None or spec.loader is None:
-            # Hard to trigger in tests, so pragma: no cover
             raise PluginLoadError(f"Could not load spec for {path}")  # pragma: no cover
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
