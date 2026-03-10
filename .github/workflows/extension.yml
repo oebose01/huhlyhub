@@ -44,10 +44,10 @@ jobs:
           mkdir -p dist
           cp manifest.json popup.html popup.js crypto-helper.js verify.js dist/
           cd dist
-          zip -r ../creator-os-extension.zip *
+          zip -r ../huhlyhub-extension.zip *
 
       - name: Upload extension artifact
         uses: actions/upload-artifact@v4
         with:
           name: extension-zip
-          path: frontend/extension/creator-os-extension.zip
+          path: frontend/extension/huhlyhub-extension.zip

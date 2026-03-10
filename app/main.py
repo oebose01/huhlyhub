@@ -156,6 +156,7 @@ async def stripe_webhook(request: Request):
 async def sentry_debug():
     1 / 0  # This raises ZeroDivisionError without returning anything
 
+
 # Optional debug route for testing Sentry – remove after confirming
 @app.get("/api/sentry-debug")
 async def sentry_debug():
